@@ -3,6 +3,7 @@
 
 # Remove those pesky DB and Index Files
 .DS_Store
+._.DS_Store
 Thumbs.db
 
 # Omit Session Data
