@@ -1,0 +1,13 @@
+# Omit anything compiled
+/bootstrap/compiled.php
+
+# Remove those pesky DB and Index Files
+.DS_Store
+Thumbs.db
+
+# Omit Session Data
+/app/storage/*.*
+
+# Omit composer
+composer.phar
+
