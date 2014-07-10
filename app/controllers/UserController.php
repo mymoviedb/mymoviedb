@@ -60,6 +60,79 @@ public function login()
 /**
   * Display listing of the resource
   * 
+  * @param int $userid
+  * @return Response
+  */
+// This action grabs the user info and displays it in the Edit Profile menu. Controls data sent to user profile modal
+public function show($userid)
+{
+	// Grab currently logged on user record (username, email, password)
+	$user = DB::table('users')
+		->where('id', '=', Auth::user()->id)
+		->get(array('givenname', 'surname', 'username', 'email', 'password'));
+
+	// Return to the modal view
+	return View::make('user.modals.profile-edit')
+		->with('user', $user);
+} // End Show Function
+
+
+/**
+  * Display listing of the resource
+  * 
+  * @return Response
+  */
+// This action stores changes to the user via the user profile link (modal)
+public function store()
+{
+	// Grab the user array to gather data from the edit profile modal
+	$userdata = array(
+		'id' => Input::get('id'),
+		'givenname' => Input::get('givenname'),
+		'surname' => Input::get('surname'),
+		'email' => Input::get('email'),
+		'password' => Input::get('password')
+		);
+
+	// Check if the password and password confirmation fields from the submitted form matches.
+	if($userdata['password'] != Input::get('password_confirmation'))
+	{
+		return Redirect::route('home')
+			->with('message', FlashMessage::DisplayAlert('New Password and Confirmation Password fields did NOT match !', 'danger'));
+	}
+
+	// Get the original database record for the user
+	$user = UserModel::find($userdata['id']);
+
+	// Chek to see if the password field was changed on the submi form so we can hash it
+	if($userdata['password'] != $user->password)
+	{
+		$userdata['password'] = Hash::make(Input::get('password'));
+	}
+
+	// Assign the input info back to the $user object so it can be saved to the database
+	$user->givenname = $userdata['givenname'];
+	$user->surname = $userdata['surname'];
+	$user->email = $userdata['email'];
+	$user->password = $userdata['password'];
+
+	// Save the record to the DB (post validation), then redirect back to home
+	if($user->save())
+	{
+		return Redirect::route('home')
+			->with('message', FlashMessage::DisplayAlert('Profile updated succesfully', 'success'));
+	}
+
+	// If the save operation failed then return to home with errors
+	return Redirect::route('home')
+			->withInput()->withErrors($userdata->errors);
+
+} // End store Function
+
+
+/**
+  * Display listing of the resource
+  * 
   * @return Response
   */
 

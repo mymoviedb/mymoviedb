@@ -15,7 +15,7 @@
 Route::group(array('before' => 'auth'), function()
 {
 	Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
-
+	Route::resource('users', 'UserController');
 });
 
 
