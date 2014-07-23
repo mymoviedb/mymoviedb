@@ -16,6 +16,7 @@
 		<?php
 			$username = Session::get('current_user');
 			$userid = Session::get('user_id');
+			$access = Session::get('user_access');
 		?>
 		
 
@@ -29,6 +30,17 @@
 
 	      	<!-- Home Menu. -->
 	      	<li>{{ HTML::Link('/', 'Dashboard') }}</li>
+
+<!-- Admin Panel -->
+	      	<!-- If admin user then display the admin panel -->
+	      	@if($access == "Admin" || $access == "admin")
+	      		<li class="dropdown" id="adminbtn">
+	      		<a href="#adminbtn" class="dropdown-toggle" data-toggle="dropdown">Admin Panel <b class="caret"></b></a>
+	      		<ul class="dropdown-menu">
+	      			<li>{{ HTML::Link('adminpanel', 'User Administration') }}</li>
+	      		</ul>
+	      		</li>
+	      	@endif
 
 	      </ul> <!-- End Left Nav -->
 

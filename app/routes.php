@@ -18,6 +18,11 @@ Route::group(array('before' => 'auth'), function()
 	Route::resource('users', 'UserController');
 });
 
+// Check access level prior to allowing the admin access to the content
+Route::group(array('before' => 'authadmin'), function()
+{
+	Route::resource('adminpanel', 'AdminController');
+});
 
 
 // Route to the login page

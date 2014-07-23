@@ -38,6 +38,15 @@ Route::filter('auth', function()
 	if (Auth::guest()) return Redirect::guest('login');
 });
 
+Route::filter('authadmin', function()
+{
+	if (Auth::guest()) return Redirect::guest('login');
+	// If the user does not hav admin access, then don't allow them to be routed to the view
+	if (Session::get('user_access' != 'admin' || 'user_access' !='Admin')) 
+		return Redirect::route('home')
+			->with('message', FlashMessage::DisplayAlert('You are not authorized to view that page', 'danger'));
+});
+
 
 Route::filter('auth.basic', function()
 {
